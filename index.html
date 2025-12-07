@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gemi Kontrol ve LED</title>
+
+<!-- Leaflet CSS & JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<style>
+  body { margin: 0; font-family: sans-serif; }
+  .container { display: flex; height: 100vh; }
+  #map { flex: 2; }
+  .controls { flex: 1; text-align: center; padding-top: 50px; }
+  button { font-size: 24px; padding: 15px; margin: 20px; width: 150px; }
+</style>
+</head>
+
+<body>
+<div class="container">
+
+  <!-- Harita -->
+  <div id="map"></div>
+
+  <!-- LED Kontroller -->
+  <div class="controls">
+    <h2>LED Kontrol</h2>
+    <button id="ledOn">LED ON</button>
+    <button id="ledOff">LED OFF</button>
+  </div>
+
+</div>
+
+<script>
+  // ESP IP adresi (WiFi IP’si)
+  const espIp = "192.168.1.55"; // Bunu kendi ESP IP’n ile değiştir
+
+  // Harita başlat
+  var map = L.map('map').setView([40.9857, 29.0312], 13);
+
+  // OpenStreetMap katmanı
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19
+  }).addTo(map);
+
+  // Marker
+  var marker = L.marker([40.9857, 29.0312]).addTo(map)
+                .bindPopup("Geminin konumu")
+                .openPopup();
+
+  // LED kontrol butonları
+  document.getElementById("ledOn").onclick = () => {
+    fetch(`http://${espIp}/led/on`).catch(err => console.error(err));
+  };
+  document.getElementById("ledOff").onclick = () => {
+    fetch(`http://${espIp}/led/off`).catch(err => console.error(err));
+  };
+
+  // Konumu her 5 saniyede güncelle
+  setInterval(() => {
+    fetch(`http://${espIp}/location`)
+      .then(res => res.json())
+      .then(data => {
+        marker.setLatLng([data.lat, data.lon]);
+        map.setView([data.lat, data.lon]); // Haritayı marker ile merkezle
+      })
+      .catch(err => console.error("ESP bağlantısı yok:", err));
+  }, 5000);
+</script>
+</body>
+</html>
