@@ -52,20 +52,20 @@
 
   // LED kontrol butonları
   document.getElementById("ledOn").onclick = () => {
-    fetch(`https://${espUrl}/led/on`)
+    fetch(`http://${espUrl}/led/on`)
       .then(() => console.log("LED açıldı"))
       .catch(err => console.error("ESP bağlantısı yok:", err));
   };
 
   document.getElementById("ledOff").onclick = () => {
-    fetch(`https://${espUrl}/led/off`)
+    fetch(`http://${espUrl}/led/off`)
       .then(() => console.log("LED kapandı"))
       .catch(err => console.error("ESP bağlantısı yok:", err));
   };
 
   // Marker ve map’i her 3 saniyede güncelle
   setInterval(() => {
-    fetch(`https://${espUrl}/location`)
+    fetch(`http://${espUrl}/location`)
       .then(res => res.json())
       .then(data => {
         if(data.lat && data.lon){
