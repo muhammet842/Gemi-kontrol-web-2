@@ -35,7 +35,8 @@
 
 <script>
   // NGROK üzerinden ESP tüneli
-  const espUrl = "barbra-theophanic-dorla.ngrok-free.dev"; 
+  const espUrl = "barbra-theophanic-dorla.ngrok-free.dev";
+
 
   // Harita başlat
   var map = L.map('map').setView([40.9857, 29.0312], 13);
@@ -51,30 +52,31 @@
                 .openPopup();
 
   // LED kontrol butonları
-  document.getElementById("ledOn").onclick = () => {
-    fetch(`http://${espUrl}/led/on`)
-      .then(() => console.log("LED açıldı"))
-      .catch(err => console.error("ESP bağlantısı yok:", err));
-  };
+  // LED ON
+document.getElementById("ledOn").onclick = () => {
+    fetch(`https://${espUrl}/led/on`)
+        .then(() => console.log("LED açıldı"))
+        .catch(err => console.error("ESP bağlantısı yok:", err));
+};
 
-  document.getElementById("ledOff").onclick = () => {
-    fetch(`http://${espUrl}/led/off`)
-      .then(() => console.log("LED kapandı"))
-      .catch(err => console.error("ESP bağlantısı yok:", err));
-  };
+// LED OFF
+document.getElementById("ledOff").onclick = () => {
+    fetch(`https://${espUrl}/led/off`)
+        .then(() => console.log("LED kapandı"))
+        .catch(err => console.error("ESP bağlantısı yok:", err));
+};
 
-  // Marker ve map’i her 3 saniyede güncelle
-  setInterval(() => {
-    fetch(`http://${espUrl}/location`)
-      .then(res => res.json())
-      .then(data => {
-        if(data.lat && data.lon){
-          marker.setLatLng([data.lat, data.lon]);
-          map.setView([data.lat, data.lon]);
-        }
-      })
-      .catch(err => console.error("ESP bağlantısı yok:", err));
-  }, 3000);
+// Konum güncelle
+setInterval(() => {
+    fetch(`https://${espUrl}/location`)
+        .then(res => res.json())
+        .then(data => {
+            marker.setLatLng([data.lat, data.lon]);
+            map.setView([data.lat, data.lon]);
+        })
+        .catch(err => console.error("ESP bağlantısı yok:", err));
+}, 3000);
+
 
 </script>
 </body>
