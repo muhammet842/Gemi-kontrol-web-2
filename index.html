@@ -54,14 +54,14 @@
   // LED kontrol butonları
   // LED ON
 document.getElementById("ledOn").onclick = () => {
-    fetch(`https://${espUrl}/led/on`)
+    fetch(`http://${espUrl}/led/on`)
         .then(() => console.log("LED açıldı"))
         .catch(err => console.error("ESP bağlantısı yok:", err));
 };
 
 // LED OFF
 document.getElementById("ledOff").onclick = () => {
-    fetch(`https://${espUrl}/led/off`)
+    fetch(`http://${espUrl}/led/off`)
         .then(() => console.log("LED kapandı"))
         .catch(err => console.error("ESP bağlantısı yok:", err));
 };
