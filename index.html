@@ -68,7 +68,7 @@ document.getElementById("ledOff").onclick = () => {
 
 // Konum güncelle
 setInterval(() => {
-    fetch(`https://${espUrl}/location`)
+    fetch(`http://${espUrl}/location`)
         .then(res => res.json())
         .then(data => {
             marker.setLatLng([data.lat, data.lon]);
